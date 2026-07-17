@@ -23,6 +23,16 @@
   box-shadow: none;
   outline: none;
 }
+/* 文字颜色对齐导航（text-dim / hover text-head）。
+   必须在这里写死：库 trigger 的 data-[size]:text-body 在合并主题下会解析成
+   Terra 的颜色工具类且特异性更高，把 trigger 文字染成了 body 色而非 dim。 */
+[data-slot="select-trigger"] {
+  color: var(--c-text-tertiary);
+  transition: color 150ms ease-out;
+}
+[data-slot="select-trigger"]:hover {
+  color: var(--c-text-heading);
+}
 [data-slot="select-trigger"] svg {
   opacity: 0;
   transition: opacity 150ms ease-out;

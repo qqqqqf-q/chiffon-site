@@ -12,13 +12,16 @@
    css 里的相对路径 ../../node_modules 与本目录层级一致，可直接复用。 */
 @import "./misans-vf.css";
 
-/* ── LangSelect 裸化：去掉 felinic select trigger 的描边环和 hover 填充，
-   让它读起来就是普通导航文字；箭头默认隐藏，hover 触发器时淡入 ── */
-[data-slot="select-trigger"] {
-  box-shadow: none;
-}
-[data-slot="select-trigger"]:hover {
+/* ── LangSelect 裸化：去掉 felinic select trigger 的全部壳层（描边环/hover 填充/
+   focus 环/open 态），让它读起来就是普通导航文字；箭头默认隐藏，hover 时淡入 ── */
+[data-slot="select-trigger"],
+[data-slot="select-trigger"]:hover,
+[data-slot="select-trigger"]:focus,
+[data-slot="select-trigger"]:focus-visible,
+[data-slot="select-trigger"][data-state="open"] {
   background-color: transparent;
+  box-shadow: none;
+  outline: none;
 }
 [data-slot="select-trigger"] svg {
   opacity: 0;

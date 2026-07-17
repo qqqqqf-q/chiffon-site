@@ -42,17 +42,17 @@ const socials = [
 
 <BaseLayout title="Introducing Chiffonwind" description="The personal release page of Chiffonwind">
 
-  <!-- 顶栏：三段式 grid（字标 / 中间导航 / CTA 下拉），随滚动吸附 -->
-  <header id="site-header" class="sticky top-0 z-40 w-full px-10 sm:px-20 h-[66px] flex items-center justify-between bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
-    <a href="/" class="text-head text-[22px] font-bold tracking-[0.03em] uppercase">
+  <!-- 顶栏：三段式 grid（字标 / 居中导航 / 语言切换+CTA），随滚动吸附 -->
+  <header id="site-header" class="sticky top-0 z-40 w-full px-10 sm:px-20 h-[66px] grid grid-cols-[1fr_auto_1fr] items-center bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
+    <a href="/" class="justify-self-start text-head text-[22px] font-bold tracking-[0.03em] uppercase">
       Chiffon
     </a>
-    <div class="flex items-center gap-8">
-      <nav class="flex items-center gap-8">
-        <a href="#about" class="text-base text-dim hover:text-head transition-colors">About</a>
-        <a href="#projects" class="text-base text-dim hover:text-head transition-colors">Projects</a>
-        <a href="https://清凤.fun" class="text-base text-dim hover:text-head transition-colors">Blog</a>
-      </nav>
+    <nav class="flex items-center gap-8">
+      <a href="#about" class="text-base text-dim hover:text-head transition-colors">About</a>
+      <a href="#projects" class="text-base text-dim hover:text-head transition-colors">Projects</a>
+      <a href="https://清凤.fun" class="text-base text-dim hover:text-head transition-colors">Blog</a>
+    </nav>
+    <div class="justify-self-end flex items-center gap-4">
       <LangSelect client:only="vue" />
       <ContactMenu client:load />
     </div>

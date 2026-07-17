@@ -1,0 +1,113 @@
+---
+// 字标实验室：纯调试工具页，定稿后删除。
+// 让用户用滑杆实时预览 wordmark 的各种参数组合，避免主会话里来回盲调。
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>wordmark lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400..900&family=Oswald:wght@400..700&family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400..700&family=Sora:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-surface min-h-screen px-8 py-12">
+    <div class="max-w-3xl mx-auto">
+      <p class="text-fade text-sm mb-10">wordmark lab · 调完把参数报给我，这页定稿后删</p>
+
+      <!-- 预览区 -->
+      <div class="bg-card border border-line-soft rounded-[14px] py-16 px-8 mb-10 text-center overflow-hidden">
+        <span id="preview" class="inline-block origin-center text-head uppercase">Chiffonwind</span>
+      </div>
+
+      <!-- 当前参数 -->
+      <pre id="readout" class="text-dim text-xs font-mono mb-10 whitespace-pre-wrap"></pre>
+
+      <!-- 控制区 -->
+      <div class="flex flex-col gap-5 text-sm">
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">font</span>
+          <select id="font" class="bg-chip text-head px-3 py-1.5 rounded-md">
+            <option value="'Inter', sans-serif">Inter</option>
+            <option value="'Oswald', sans-serif">Oswald</option>
+            <option value="'Archivo', sans-serif" data-stretch="1">Archivo (可变宽度)</option>
+            <option value="'IBM Plex Sans', sans-serif">IBM Plex Sans</option>
+            <option value="'Sora', sans-serif">Sora</option>
+          </select>
+        </label>
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">size <output id="o-size"></output></span>
+          <input id="size" type="range" min="14" max="48" step="1" value="20" class="flex-1" />
+        </label>
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">weight <output id="o-weight"></output></span>
+          <input id="weight" type="range" min="400" max="900" step="50" value="800" class="flex-1" />
+        </label>
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">tracking <output id="o-tracking"></output></span>
+          <input id="tracking" type="range" min="-0.05" max="0.25" step="0.005" value="0.02" class="flex-1" />
+        </label>
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">scaleY <output id="o-scaley"></output></span>
+          <input id="scaley" type="range" min="1" max="1.35" step="0.01" value="1" class="flex-1" />
+        </label>
+        <label id="row-wdth" class="flex items-center gap-4 hidden">
+          <span class="w-32 text-dim shrink-0">width <output id="o-wdth"></output></span>
+          <input id="wdth" type="range" min="62" max="125" step="1" value="100" class="flex-1" />
+        </label>
+        <label class="flex items-center gap-4">
+          <span class="w-32 text-dim shrink-0">text</span>
+          <input id="text" type="text" value="Chiffonwind" class="bg-chip text-head px-3 py-1.5 rounded-md flex-1" />
+        </label>
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const preview = $('preview');
+      const readout = $('readout');
+
+      function apply() {
+        const font = $('font').value;
+        const isArchivo = $('font').selectedOptions[0].dataset.stretch === '1';
+        $('row-wdth').classList.toggle('hidden', !isArchivo);
+
+        const size = $('size').value;
+        const weight = $('weight').value;
+        const tracking = $('tracking').value;
+        const scaley = $('scaley').value;
+        const wdth = $('wdth').value;
+        const text = $('text').value || 'Chiffonwind';
+
+        preview.textContent = text;
+        preview.style.fontFamily = font;
+        preview.style.fontSize = size + 'px';
+        preview.style.fontWeight = weight;
+        preview.style.letterSpacing = tracking + 'em';
+        preview.style.transform = `scaleY(${scaley})`;
+        preview.style.fontVariationSettings = isArchivo ? `"wdth" ${wdth}` : 'normal';
+
+        $('o-size').textContent = size + 'px';
+        $('o-weight').textContent = weight;
+        $('o-tracking').textContent = tracking + 'em';
+        $('o-scaley').textContent = scaley;
+        $('o-wdth').textContent = wdth;
+
+        const family = font.split(',')[0].replace(/'/g, '');
+        readout.textContent =
+          `font: ${family}  size: ${size}px  weight: ${weight}  ` +
+          `tracking: ${tracking}em  scaleY: ${scaley}` +
+          (isArchivo ? `  width: ${wdth}` : '');
+      }
+
+      document.querySelectorAll('input, select').forEach((el) => el.addEventListener('input', apply));
+      apply();
+    </script>
+  </body>
+</html>

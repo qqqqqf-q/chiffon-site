@@ -1,0 +1,152 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+/* Memoh 的组件库样式（@felinic/ui）：按钮/菜单的交互壳层和 token 都在这里。
+   它的 base 层会设置 body 底色，但我们下方 @layer base 里的 Terra 规则在它之后，同名属性以我们为准。 */
+@import "@felinic/ui/style.css";
+
+/* Tailwind v4 默认不扫 node_modules；@felinic/ui 是 file: 链接进来的，
+   必须显式把包源码加入扫描，否则组件里的 utility 类（text-background/bg-popover 等）不会生成。 */
+@source "/Users/qqqqqf/Documents/Memoh/packages/ui/src";
+
+/* MiSans VF（与 Memoh 同源）：标题/展示字体。woff2 分块在 node_modules/misans-vf/lib/，
+   css 里的相对路径 ../../node_modules 与本目录层级一致，可直接复用。 */
+@import "./misans-vf.css";
+
+/* ── 本地覆盖：去掉 @felinic/ui 按钮的 press 缩放动画 ──
+   库里默认 active 时 ::before 壳层 scale 0.96（Memoh 应用里成立的交互），
+   但在这个发布页语境里显得多余。只在本站覆盖，不动上游。 */
+[data-button]:is([data-variant="default"], [data-variant="primary"]):active::before {
+  scale: 1 1;
+}
+
+/* 超椭圆按钮：连续曲率圆角（Chrome 139+ 的 corner-shape），
+   不支持的浏览器回落为普通 pill 圆角，无功能影响。
+   圆角半径由 class 里的 rounded-full 提供；按钮的 ::before 交互壳层
+   border-radius 是 inherit，但 corner-shape 不继承，需要单独声明。 */
+.squircle,
+.squircle::before {
+  corner-shape: squircle;
+}
+
+/* ── Terra Design Tokens（浅色版，源自 chiffon-Blog，保持血缘）── */
+:root {
+  color-scheme: light;
+  --c-font-body: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  /* 展示字体（H1/字标级标题）：MiSans VF，与 Memoh 同源；wght 轴 150–450 */
+  --c-font-display: 'MiSans', 'Inter', 'PingFang SC', system-ui, sans-serif;
+  /* 导语/叙事段落用衬线：发布页的正文质感主要来自衬线，中文回落到宋体系 */
+  --c-font-serif: 'Newsreader', 'Songti SC', 'Noto Serif SC', 'SimSun', serif;
+  --c-font-code: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  --c-bg-page: #FAF9F6;
+  --c-bg-deep: #F0EEE7;
+  --c-bg-sub: #F5F4EE;
+  --c-bg-card: #ffffff;
+  --c-bg-tag: #E8E5DC;
+
+  --c-text-primary: #1a1a18;
+  --c-text-heading: #0f0f0d;
+  --c-text-secondary: #3D3830;
+  --c-text-tertiary: #6B6560;
+  --c-text-muted: #9a9590;
+
+  --c-border: #D8D5CC;
+  --c-border-subtle: #E8E5DC;
+  --c-border-mid: #B8B4AA;
+
+  --c-accent: #ae5630;
+  --c-accent-fg: #FAF9F6;
+
+  --c-scrollbar: #D0CCC4;
+  --c-scrollbar-hover: #B0ACA4;
+}
+
+/* ── Terra 深色 tokens：色号直接取自 Memoh（@felinic/ui 的 .dark 块）──
+   中性零彩度 oklch 体系，比旧 Terra 深（#262624 太亮，"暗不下去"）。
+   由 BaseLayout 里的 matchMedia 脚本按系统偏好给 <html> 加/去 .dark。
+   accent 保留 Terra 赤陶橙（品牌色不随 Memoh 走）。 */
+.dark {
+  color-scheme: dark;
+  --c-bg-page: oklch(0.152 0 0);      /* = Memoh --background */
+  --c-bg-deep: oklch(0.115 0 0);      /* 比 page 再暗一档（footer 带/bar 轨道） */
+  --c-bg-sub: oklch(0.185 0 0);       /* = Memoh --sidebar */
+  --c-bg-card: oklch(0.21 0 0);       /* = Memoh --card */
+  --c-bg-tag: oklch(0.26 0 0);        /* = Memoh --muted */
+
+  --c-text-primary: oklch(0.90 0 0);  /* = Memoh --foreground */
+  --c-text-heading: oklch(0.96 0 0);
+  --c-text-secondary: oklch(0.86 0 0);
+  --c-text-tertiary: oklch(0.70 0 0); /* = Memoh --muted-foreground */
+  --c-text-muted: oklch(0.55 0 0);
+
+  --c-border: oklch(1 0 0 / 8%);      /* = Memoh --border（8% 白） */
+  --c-border-subtle: oklch(1 0 0 / 5%);
+  --c-border-mid: oklch(1 0 0 / 14%);
+
+  --c-accent: #ae5630;
+  --c-accent-fg: #FAF9F6;
+
+  --c-scrollbar: oklch(1 0 0 / 0.14);
+  --c-scrollbar-hover: oklch(1 0 0 / 0.26);
+}
+
+@theme inline {
+  --color-surface: var(--c-bg-page);
+  --color-card: var(--c-bg-card);
+  --color-deep: var(--c-bg-deep);
+  --color-sub: var(--c-bg-sub);
+  --color-chip: var(--c-bg-tag);
+  --color-line: var(--c-border);
+  --color-line-soft: var(--c-border-subtle);
+  --color-line-mid: var(--c-border-mid);
+  --color-head: var(--c-text-heading);
+  --color-body: var(--c-text-secondary);
+  --color-dim: var(--c-text-tertiary);
+  --color-fade: var(--c-text-muted);
+  --color-accent: var(--c-accent);
+
+  --font-sans: var(--c-font-body);
+  --font-display: var(--c-font-display);
+  --font-serif: var(--c-font-serif);
+  --font-mono: var(--c-font-code);
+
+  --radius-control: 6.5px;
+  --radius-row: 10px;
+  --radius-section: 14px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 150ms;
+}
+
+@layer base {
+  /* <summary> 默认的三角 marker，下拉按钮不需要 */
+  .no-marker::-webkit-details-marker {
+    display: none;
+  }
+
+  html {
+    background: var(--c-bg-page);
+    color: var(--c-text-secondary);
+    font-family: var(--c-font-body);
+    font-size: 15px;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--c-scrollbar);
+    border-radius: 99px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-scrollbar) transparent;
+  }
+}

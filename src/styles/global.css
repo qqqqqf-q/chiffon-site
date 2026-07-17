@@ -12,6 +12,26 @@
    css 里的相对路径 ../../node_modules 与本目录层级一致，可直接复用。 */
 @import "./misans-vf.css";
 
+/* ── LangSelect 裸化：去掉 felinic select trigger 的描边环和 hover 填充，
+   让它读起来就是普通导航文字；箭头默认隐藏，hover 触发器时淡入 ── */
+[data-slot="select-trigger"] {
+  box-shadow: none;
+}
+[data-slot="select-trigger"]:hover {
+  background-color: transparent;
+}
+[data-slot="select-trigger"] svg {
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+}
+[data-slot="select-trigger"]:hover svg {
+  opacity: 0.5;
+}
+/* 下拉选项提亮一档（库里默认偏暗） */
+[data-slot="select-item"] {
+  color: var(--foreground);
+}
+
 /* ── 本地覆盖：去掉 @felinic/ui 按钮的 press 缩放动画 ──
    库里默认 active 时 ::before 壳层 scale 0.96（Memoh 应用里成立的交互），
    但在这个发布页语境里显得多余。只在本站覆盖，不动上游。 */

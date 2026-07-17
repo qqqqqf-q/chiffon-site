@@ -21,7 +21,7 @@ watch(value, (v) => {
 
 <template>
   <Select v-model="value">
-    <SelectTrigger size="sm" class="border-none shadow-none bg-transparent">
+    <SelectTrigger size="sm" class="border-none shadow-none bg-transparent text-dim hover:text-head transition-colors">
       <SelectValue />
     </SelectTrigger>
     <SelectContent>

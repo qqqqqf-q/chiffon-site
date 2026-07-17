@@ -176,7 +176,7 @@ const socials = [
        左：字标 + 圆形图标联系方式；右：项目/站点链接组（title 亮、条目次亮、宽字距）。
        底栏只放语言切换，无版权行、无主题切换（主题只跟随系统）。 -->
   <footer class="bg-[#131313] dark:bg-deep">
-    <div class="w-full px-8 sm:px-16 py-14 flex flex-col sm:flex-row justify-between gap-10">
+    <div class="w-full px-8 sm:px-16 py-16 flex flex-col sm:flex-row justify-between gap-10">
       <div>
         <div class="text-white text-[22px] font-bold tracking-[0.03em] uppercase mb-6">Chiffon</div>
         <div class="flex items-center gap-3">
@@ -186,7 +186,7 @@ const socials = [
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.name}
-              class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-colors"
+              class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/60 hover:bg-white/15 hover:text-white transition-colors"
             >
               {s.icon === 'github' && (
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
@@ -204,18 +204,18 @@ const socials = [
           ))}
         </div>
       </div>
-      <div class="flex gap-16">
-        <div class="flex flex-col gap-3">
-          <span class="text-white text-base font-medium tracking-[0.08em] mb-1">Projects</span>
+      <div class="flex gap-24">
+        <div class="flex flex-col gap-4">
+          <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">Projects</span>
           {projects.map((p) => (
-            <a href={p.link} target="_blank" rel="noopener noreferrer" class="text-white/55 text-[15px] tracking-[0.02em] hover:text-white transition-colors">{p.name}</a>
+            <a href={p.link} target="_blank" rel="noopener noreferrer" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{p.name}</a>
           ))}
         </div>
-        <div class="flex flex-col gap-3">
-          <span class="text-white text-base font-medium tracking-[0.08em] mb-1">Site</span>
-          <a href="#about" class="text-white/55 text-[15px] tracking-[0.02em] hover:text-white transition-colors">About</a>
-          <a href="#journal" class="text-white/55 text-[15px] tracking-[0.02em] hover:text-white transition-colors">Journal</a>
-          <a href="https://清凤.fun" class="text-white/55 text-[15px] tracking-[0.02em] hover:text-white transition-colors">Blog</a>
+        <div class="flex flex-col gap-4">
+          <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">Site</span>
+          <a href="#about" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">About</a>
+          <a href="#journal" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">Journal</a>
+          <a href="https://清凤.fun" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">Blog</a>
         </div>
       </div>
     </div>

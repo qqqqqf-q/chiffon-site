@@ -93,13 +93,26 @@ const socials = [
       </div>
     </section>
 
-    <!-- 导语：衬线、限宽，发布页的正文质感主要靠它 -->
-    <section id="about" class="mx-auto max-w-2xl px-6 pb-24 scroll-mt-20">
-      <p class="font-serif text-lg leading-relaxed text-body mb-6">
+    <!-- 导语：Kimi 正文参数——MiSans VF 17px / 90% 黑（深色模式回落 Terra body）/
+         行高 1.65 / 栏宽 760px -->
+    <section id="about" class="mx-auto max-w-[760px] px-6 pb-24 scroll-mt-20">
+      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body mb-8">
         Chiffonwind is a student and a full-stack developer, occasionally a designer. From agent runtimes to quant arbitrage, from input tools to digital twins — the bar for building something is simple: he has to actually use it every day.
       </p>
-      <p class="font-serif text-lg leading-relaxed text-body">
+      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body">
         This site doesn't chase update frequency. It only ships when there is something worth releasing. Every update is a new version.
+      </p>
+    </section>
+
+    <!-- 小节模板（Kimi 式）：标题 MiSans 32px/450 + 正文 17px/330。
+         文案为 mock 占位，等正式文案替换；复用时复制这个 section 即可 -->
+    <section class="mx-auto max-w-[760px] px-6 pb-24">
+      <h2 class="font-display text-[32px] font-[450] text-head mb-6">Tools That Earn Their Keep</h2>
+      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body mb-8">
+        Every project here started as an itch of his own. Arkloop came out of building one too many agent loops by hand; NanoTrans exists because switching windows to translate a sentence is one window too many. If it doesn't survive daily use by its own author, it doesn't ship.
+      </p>
+      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body">
+        The rest of the time goes to school, reading, and the occasional quant experiment that may or may not make the money back.
       </p>
     </section>
 

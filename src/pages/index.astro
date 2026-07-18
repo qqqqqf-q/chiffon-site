@@ -42,22 +42,23 @@ const socials = [
 
 <BaseLayout title="Introducing Chiffonwind" description="The personal release page of Chiffonwind">
 
-  <!-- 顶栏：三段式 grid（字标 / 居中导航 / 语言切换+CTA），随滚动吸附 -->
-  <header id="site-header" class="sticky top-0 z-40 w-full px-10 sm:px-20 h-[66px] grid grid-cols-[1fr_auto_1fr] items-center bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
-    <div class="justify-self-start flex items-end gap-1">
+  <!-- 顶栏：nav 用 absolute 钉在 header 几何中心（grid 的 1fr 分配会受两侧
+       内容宽度差影响，视觉中心会偏），左右两组内容 flex 两端分布 -->
+  <header id="site-header" class="sticky top-0 z-40 relative w-full px-10 sm:px-20 h-[66px] flex items-center justify-between bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
+    <div class="flex items-end gap-1">
       <a href="/" class="text-head text-2xl font-bold tracking-[0.02em] uppercase">
         Chiffon
       </a>
       <!-- 语言切换跟在字标右侧，小一号、dim 色，读作字标的"副标题"。
-           底部对齐后上抬 3px：'g' 的下伸笔画贴底时视觉上会坠 -->
+           底部对齐后上抬 2px：'g' 的下伸笔画贴底时视觉上会坠 -->
       <span class="mb-[2px]"><LangSelect client:only="vue" /></span>
     </div>
-    <nav class="flex items-center gap-8">
+    <nav class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-8">
       <a href="#about" class="text-base text-dim hover:text-head transition-colors">About</a>
       <a href="#projects" class="text-base text-dim hover:text-head transition-colors">Projects</a>
       <a href="https://清凤.fun" class="text-base text-dim hover:text-head transition-colors">Blog</a>
     </nav>
-    <div class="justify-self-end">
+    <div>
       <ContactMenu client:load />
     </div>
   </header>

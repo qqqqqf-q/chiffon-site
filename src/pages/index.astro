@@ -44,16 +44,20 @@ const socials = [
 
   <!-- 顶栏：三段式 grid（字标 / 居中导航 / 语言切换+CTA），随滚动吸附 -->
   <header id="site-header" class="sticky top-0 z-40 w-full px-10 sm:px-20 h-[66px] grid grid-cols-[1fr_auto_1fr] items-center bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
-    <a href="/" class="justify-self-start text-head text-[22px] font-bold tracking-[0.03em] uppercase">
-      Chiffon
-    </a>
+    <div class="justify-self-start flex items-end gap-1">
+      <a href="/" class="text-head text-2xl font-bold tracking-[0.02em] uppercase">
+        Chiffon
+      </a>
+      <!-- 语言切换跟在字标右侧，小一号、dim 色，读作字标的"副标题"。
+           底部对齐后上抬 3px：'g' 的下伸笔画贴底时视觉上会坠 -->
+      <span class="mb-[2px]"><LangSelect client:only="vue" /></span>
+    </div>
     <nav class="flex items-center gap-8">
       <a href="#about" class="text-base text-dim hover:text-head transition-colors">About</a>
       <a href="#projects" class="text-base text-dim hover:text-head transition-colors">Projects</a>
       <a href="https://清凤.fun" class="text-base text-dim hover:text-head transition-colors">Blog</a>
     </nav>
-    <div class="justify-self-end flex items-center gap-4">
-      <LangSelect client:only="vue" />
+    <div class="justify-self-end">
       <ContactMenu client:load />
     </div>
   </header>
@@ -79,7 +83,7 @@ const socials = [
         <!-- 两行式居中标题：名字一行、态度一行（灰色做层级） -->
         <h1 class="font-display text-head text-4xl sm:text-5xl font-[450] tracking-tight mb-6 mx-auto max-w-5xl px-6">
           <span class="block">Chiffonwind:</span>
-          <span class="block text-dim">Never Not Building</span>
+          <span class="block text-dim">Always Building.</span>
         </h1>
         <p class="text-fade text-sm mb-10">since 2009</p>
       </div>

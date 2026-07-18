@@ -29,6 +29,10 @@
 [data-slot="select-trigger"] {
   color: var(--c-text-tertiary);
   transition: color 150ms ease-out;
+  /* 副标题形态：小字号、无内边距，贴着字标 */
+  font-size: 12px;
+  height: auto;
+  padding: 2px 4px;
 }
 [data-slot="select-trigger"]:hover {
   color: var(--c-text-heading);
@@ -43,6 +47,11 @@
 /* 下拉选项提亮一档（库里默认偏暗） */
 [data-slot="select-item"] {
   color: var(--foreground);
+}
+/* Get in touch / Language 下拉面板去描边，只留阴影做分层 */
+[data-slot="dropdown-menu-content"],
+[data-slot="select-content"] {
+  border: none;
 }
 
 /* ── 本地覆盖：去掉 @felinic/ui 按钮的 press 缩放动画 ──

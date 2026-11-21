@@ -137,11 +137,13 @@ const jsonLd = buildArticleJsonLd({
       <Content />
     </article>
 
-    <!-- 尾部导航:回到索引 + 前后篇。长中文标题截断,保持两行布局不炸 -->
+    <!-- 尾部导航:回到索引 + 前后篇。长标题截断,保持两行布局不炸。
+         前后篇这一组必须能收缩(min-w-0):否则两条链接各按 220px 上限撑开,
+         窄屏下会把整页撑出横向滚动。窄屏同时收紧两条链接的间距,给标题多留一点宽度。 -->
     <hr class="border-line-soft mt-16 mb-10" />
     <nav class="flex items-start justify-between gap-6 text-[15px]">
       <a href={indexPath} class="text-fade hover:text-dim transition-colors shrink-0">&larr; Journal</a>
-      <div class="flex gap-10 text-right">
+      <div class="flex min-w-0 gap-6 sm:gap-10 text-right">
         {newer && (
           <a href={journalPostHref(lang, newer.slug)} class="group min-w-0">
             <span class="block text-fade text-[12px] mb-1">Newer</span>

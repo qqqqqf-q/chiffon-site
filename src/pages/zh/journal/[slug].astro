@@ -1,0 +1,14 @@
+---
+// 实现见 JournalArticle.astro;本文件只决定语言与静态路径。
+import JournalArticle from '../../../components/JournalArticle.astro';
+import { getJournal } from '../../../lib/journal';
+
+export async function getStaticPaths() {
+  const all = await getJournal('zh');
+  return all.map((item) => ({ params: { slug: item.slug }, props: { item, all } }));
+}
+
+const { item, all } = Astro.props;
+---
+
+<JournalArticle lang="zh" item={item} all={all} />

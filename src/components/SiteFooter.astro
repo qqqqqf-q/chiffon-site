@@ -9,12 +9,15 @@ interface Props {
   aboutLabel: string;
   journalLabel: string;
   lang?: 'en' | 'zh';
+  /** 另一种语言下同一页面的地址;缺省为对方语言首页 */
+  altHref?: string;
 }
 
-const { projectsTitle, siteTitle, aboutLabel, journalLabel, lang = 'en' } = Astro.props;
+const { projectsTitle, siteTitle, aboutLabel, journalLabel, lang = 'en', altHref } = Astro.props;
+const journalHref = lang === 'zh' ? '/zh/journal/' : '/journal/';
 const footerProjects = PROJECTS.filter((p) => p.featuredInFooter);
 const aboutHref = lang === 'zh' ? '/zh/#about' : '/#about';
-const altLangHref = lang === 'zh' ? '/' : '/zh/';
+const altLangHref = altHref ?? (lang === 'zh' ? '/' : '/zh/');
 const altLangLabel = lang === 'zh' ? 'English' : '中文';
 const altHreflang = lang === 'zh' ? 'en' : 'zh-CN';
 ---
@@ -75,7 +78,7 @@ const altHreflang = lang === 'zh' ? 'en' : 'zh-CN';
       <div class="flex flex-col gap-4">
         <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">{siteTitle}</span>
         <a href={aboutHref} class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{aboutLabel}</a>
-        <a href="/journal/" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{journalLabel}</a>
+        <a href={journalHref} class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{journalLabel}</a>
         <a href={altLangHref} hreflang={altHreflang} class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{altLangLabel}</a>
         <a href="/rss.xml" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">RSS</a>
       </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// 语言切换：felinic Select 下拉。选中即跳转对应语言路径（/zh/ 尚未建，链接先接好）。
+// 语言切换：felinic Select 下拉。选中即跳到另一种语言下的同一页面（altHref，由页面给出），缺省回对方语言首页。
 import { ref, watch } from 'vue'
 import {
   Select,
@@ -9,12 +9,12 @@ import {
   SelectValue,
 } from '@felinic/ui'
 
-const props = withDefaults(defineProps<{ lang?: 'en' | 'zh' }>(), { lang: 'en' })
+const props = withDefaults(defineProps<{ lang?: 'en' | 'zh'; altHref?: string }>(), { lang: 'en' })
 
 const value = ref(props.lang)
 watch(value, (v) => {
   if (v !== props.lang) {
-    window.location.href = v === 'zh' ? '/zh/' : '/'
+    window.location.href = props.altHref ?? (v === 'zh' ? '/zh/' : '/')
   }
 })
 </script>

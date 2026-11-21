@@ -78,9 +78,10 @@ export function buildHomeJsonLd(lang: 'en' | 'zh') {
 }
 
 export function buildJournalIndexJsonLd(
-  posts: Array<{ slug: string; title: string; description: string; date: Date; lang: string }>,
+  posts: Array<{ href: string; title: string; description: string; date: Date; lang: string }>,
+  indexPath: string,
 ) {
-  const pageUrl = absoluteUrl('/journal/');
+  const pageUrl = absoluteUrl(indexPath);
   return {
     '@context': 'https://schema.org',
     '@graph': [
@@ -99,7 +100,7 @@ export function buildJournalIndexJsonLd(
           itemListElement: posts.map((post, idx) => ({
             '@type': 'ListItem',
             position: idx + 1,
-            url: absoluteUrl(`/journal/${post.slug}/`),
+            url: absoluteUrl(post.href),
             name: post.title,
           })),
         },
@@ -116,7 +117,8 @@ export function buildJournalIndexJsonLd(
 }
 
 export function buildArticleJsonLd(article: {
-  slug: string;
+  path: string;
+  indexPath: string;
   title: string;
   description: string;
   date: Date;
@@ -125,8 +127,9 @@ export function buildArticleJsonLd(article: {
   wordCount: number;
   tags?: string[];
   keywords?: string[];
+  image?: string;
 }) {
-  const pageUrl = absoluteUrl(`/journal/${article.slug}/`);
+  const pageUrl = absoluteUrl(article.path);
   const allKeywords = Array.from(new Set([...(article.tags ?? []), ...(article.keywords ?? [])]));
 
   return {
@@ -141,7 +144,7 @@ export function buildArticleJsonLd(article: {
         url: pageUrl,
         headline: article.title,
         description: article.description,
-        image: absoluteUrl(DEFAULT_OG_IMAGE),
+        image: absoluteUrl(article.image ?? DEFAULT_OG_IMAGE),
         datePublished: article.date.toISOString(),
         dateModified: (article.updatedDate ?? article.date).toISOString(),
         inLanguage: article.lang,
@@ -155,7 +158,7 @@ export function buildArticleJsonLd(article: {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-          { '@type': 'ListItem', position: 2, name: 'Journal', item: absoluteUrl('/journal/') },
+          { '@type': 'ListItem', position: 2, name: 'Journal', item: absoluteUrl(article.indexPath) },
           { '@type': 'ListItem', position: 3, name: article.title, item: pageUrl },
         ],
       },

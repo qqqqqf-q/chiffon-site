@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { journalPostHref, slugOf } from '../lib/journal';
 import { AUTHOR, PROJECTS, SITE_URL, absoluteUrl } from '../config/site';
 
 export const GET: APIRoute = async () => {
@@ -37,9 +38,10 @@ export const GET: APIRoute = async () => {
     '## Journal Articles',
     '',
     ...posts.map((post) => {
-      const slug = post.id.replace(/\.md$/, '');
+      // 每一份(中文原文/英文版)链接到它自己语言站下的地址
+      const href = journalPostHref(post.data.lang === 'en' ? 'en' : 'zh', slugOf(post));
       const dateStr = post.data.date.toISOString().slice(0, 10);
-      return `- [${post.data.title}](${absoluteUrl(`/journal/${slug}/`)}) (${dateStr}): ${post.data.description}`;
+      return `- [${post.data.title}](${absoluteUrl(href)}) (${dateStr}): ${post.data.description}`;
     }),
     '',
     '## Profiles & Contact',

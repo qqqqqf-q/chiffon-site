@@ -1,5 +1,6 @@
 ---
 title: 把 Llama 3 刻进芯片，有什么用？
+seoTitle: 把 Llama 3 刻进芯片有什么用：Taalas 与 Agent 的小模型推理
 description: 讨论大多集中在 Taalas 的方案装不下大模型，却忽略了 Agent 系统里大量高频、低延迟的小模型调用，比如路由判断、搜索摘要和数据清洗。
 date: 2026-02-23
 lang: zh-CN

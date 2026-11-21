@@ -7,6 +7,9 @@ const journal = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/journal' }),
   schema: z.object({
     title: z.string(),
+    // 搜索结果里显示的标题(<title>),可选。页面大标题、分享卡片和 RSS 仍用 title;
+    // 只在 title 本身不含读者会搜的词时填写。
+    seoTitle: z.string().optional(),
     description: z.string(),
     date: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),

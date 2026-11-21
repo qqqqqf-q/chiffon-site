@@ -12,6 +12,8 @@
     "@astrojs/sitemap": "^3.7.6",
     "@astrojs/vue": "^5.1.4",
     "@felinic/ui": "file:../Memoh/packages/ui",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/newsreader": "^5.3.0",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.3.0",
     "misans-vf": "^1.0.0",
@@ -21,6 +23,9 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.1",
-    "typescript": "~5.9.3"
+    "satori": "^0.63.2",
+    "sharp": "^0.34.5",
+    "typescript": "~5.9.3",
+    "wawoff2": "^2.0.1"
   }
 }

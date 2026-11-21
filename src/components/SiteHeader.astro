@@ -10,9 +10,14 @@ import WeChatDialog from './WeChatDialog.vue';
 interface Props {
   lang: 'en' | 'zh';
   current?: 'about' | 'journal';
+  /** 另一种语言下"同一个页面"的地址,语言切换跳这里;缺省回到对方语言首页 */
+  altHref?: string;
 }
 
-const { lang, current } = Astro.props;
+const { lang, current, altHref } = Astro.props;
+// 导航链接留在当前语言站内:切到中文后点 Journal 进 /zh/journal/,不会掉回英文
+const aboutHref = lang === 'zh' ? '/zh/#about' : '/#about';
+const journalHref = lang === 'zh' ? '/zh/journal/' : '/journal/';
 ---
 
 <!-- nav 用 absolute 钉在 header 几何中心(grid 的 1fr 分配会受两侧
@@ -26,18 +31,18 @@ const { lang, current } = Astro.props;
          底部对齐后上抬 2px:'g' 的下伸笔画贴底时视觉上会坠。
          注意:felinic Select 不是 SSR 安全的,只能 client:only
          (client:load 会在 SSR 抛错);静态爬虫入口同时在 SiteFooter 与 head hreflang 提供。 -->
-    <span class="mb-[2px]"><LangSelect lang={lang} client:only="vue" /></span>
+    <span class="mb-[2px]"><LangSelect lang={lang} altHref={altHref} client:only="vue" /></span>
   </div>
   {/* 居中 nav 只在 sm 以上显示:窄屏下 absolute 居中会和左侧字标+语言切换重叠。
       窄屏改用右侧组里的同一组链接(见下),保证手机顶栏也能直达 About / Journal。 */}
   <nav class="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
-    <a href={lang === 'zh' ? '/zh/#about' : '/#about'} aria-current={current === 'about' ? 'page' : undefined} class={`text-base transition-colors ${current === 'about' ? 'text-head' : 'text-dim hover:text-head'}`}>About</a>
-    <a href="/journal/" aria-current={current === 'journal' ? 'page' : undefined} class={`text-base transition-colors ${current === 'journal' ? 'text-head' : 'text-dim hover:text-head'}`}>Journal</a>
+    <a href={aboutHref} aria-current={current === 'about' ? 'page' : undefined} class={`text-base transition-colors ${current === 'about' ? 'text-head' : 'text-dim hover:text-head'}`}>About</a>
+    <a href={journalHref} aria-current={current === 'journal' ? 'page' : undefined} class={`text-base transition-colors ${current === 'journal' ? 'text-head' : 'text-dim hover:text-head'}`}>Journal</a>
   </nav>
   <div class="flex items-center gap-4">
     <nav class="flex sm:hidden items-center gap-4">
-      <a href={lang === 'zh' ? '/zh/#about' : '/#about'} aria-current={current === 'about' ? 'page' : undefined} class={`text-[15px] ${current === 'about' ? 'text-head' : 'text-dim'}`}>About</a>
-      <a href="/journal/" aria-current={current === 'journal' ? 'page' : undefined} class={`text-[15px] ${current === 'journal' ? 'text-head' : 'text-dim'}`}>Journal</a>
+      <a href={aboutHref} aria-current={current === 'about' ? 'page' : undefined} class={`text-[15px] ${current === 'about' ? 'text-head' : 'text-dim'}`}>About</a>
+      <a href={journalHref} aria-current={current === 'journal' ? 'page' : undefined} class={`text-[15px] ${current === 'journal' ? 'text-head' : 'text-dim'}`}>Journal</a>
     </nav>
     {/* 窄屏顶栏放不下字标+语言+两条链接+联系按钮,联系按钮让位给导航;
         手机端的联系方式由页脚的社交/邮件图标承接。 */}

@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
+import { journalPostHref, slugOf } from '../lib/journal';
 import { AUTHOR, SITE_NAME, SITE_URL } from '../config/site';
 
 export async function GET(context: APIContext) {
@@ -13,12 +14,13 @@ export async function GET(context: APIContext) {
     description: AUTHOR.descriptionEn,
     site: context.site ?? SITE_URL,
     items: posts.map((post) => {
-      const slug = post.id.replace(/\.md$/, '');
+      // 每一份(中文原文/英文版)链接到它自己语言站下的地址
+      const href = journalPostHref(post.data.lang === 'en' ? 'en' : 'zh', slugOf(post));
       return {
         title: post.data.title,
         description: post.data.description,
         pubDate: post.data.date,
-        link: `/journal/${slug}/`,
+        link: href,
         author: `${AUTHOR.email} (${AUTHOR.displayName})`,
         categories: [...(post.data.categories ?? []), ...(post.data.tags ?? [])],
       };

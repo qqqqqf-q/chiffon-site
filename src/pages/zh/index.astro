@@ -1,0 +1,74 @@
+---
+// 中文首页文案(/zh/)。页面结构在 src/components/Home.astro(与英文版共用)。
+// 语言策略:只有正文段落用中文;标题、导航、页脚等界面文字保持英文。
+// 正文中保留英文的:品牌名(ChatGPT/Claude/Cursor/Mobbin)、"A/B 测试"。
+// Doubao 在中文语境译作"豆包"。
+import Home from '../../components/Home.astro';
+
+const copy = {
+  metaTitle: '清凤 (Chiffonwind) — AI Agent 全栈与设计工程',
+  metaDescription:
+    '清凤（Chiffonwind）的个人主页与技术博客——跨设计与工程构建 AI Agent 平台（Arkloop、Memoh）、开发工具与真实产品。',
+  crumbHome: 'Home',
+  crumbHere: 'About',
+  heroTitle: 'Chiffonwind:',
+  heroTagline: 'Always Building.',
+  heroDate: 'since 2009',
+  heroAlt: '清凤 (Chiffonwind) 的工作台',
+  sections: [
+    {
+      id: 'about',
+      title: 'Building products across design and engineering',
+      paragraphs: [
+        `我喜欢把模糊的问题，变成人们真正能用起来的东西`,
+        `这通常意味着在界面、交互、实现、系统和架构之间穿行，而不把它们当成完全割裂的层`,
+        `产品如何运作，塑造着它应该如何设计；而设计决策，也常常反过来重塑实现`,
+        `我越来越关心的不只是 <strong class="font-[520]">怎么把它做出来</strong>，还有 <strong class="font-[520]">该做什么、为什么做</strong>`,
+      ],
+    },
+    {
+      title: 'Building Things That Work',
+      paragraphs: [
+        `我喜欢实用主义，但“实用”不等于挑最短的路走到“做完”`,
+        `有时候，多加一层抽象才是务实的选择`,
+        `有时候，是修掉一个不断制造同类问题的架构`,
+        `有时候，是扔掉一个确实不好用的交互，重新再来`,
+        `我在乎系统和逻辑，但不要为了架构而架构，也不要那种明知会把今天的问题留给明天的速度`,
+        `好的工程应该让产品更容易往前走，而不只是让方案本身看起来聪明`,
+        `<strong class="font-[520]">真正行得通，才更重要</strong>`,
+      ],
+    },
+    {
+      title: 'Real Products, Real Constraints',
+      paragraphs: [
+        `我喜欢研究已经存在的产品，尤其是那些有很多人每天都在用的`,
+        `面对 ChatGPT、Claude、Cursor、豆包这些成熟产品，我感兴趣的常常不是它看起来多厉害，而是它最后为什么做了这个选择`,
+        `一个普通的界面里，可能装着用户行为、A/B 测试、工程约束、商业目标、历史决定，或者多年迭代的结果`,
+        `我喜欢从这些结果倒推回背后的产品决策，也比较不同产品面对相似问题时做出的不同取舍`,
+        `这也是我喜欢 Mobbin 的原因`,
+        `对我来说，它不是一个精致 UI 的画廊，更像一个巨大的 <strong class="font-[520]">真实产品数据集</strong>`,
+        `真实的产品很少存在完美方案`,
+        `它们都是被真实约束之下的选择塑造出来的`,
+      ],
+    },
+    {
+      title: 'Across Design and Engineering',
+      paragraphs: [
+        `我不喜欢用某个框架或技术栈来定义自己`,
+        `工具一直在变，今天看起来重要的技术，几年后可能就很平常`,
+        `比起“用什么做的”，我更在意“为什么能成”`,
+        `所以我写代码、做界面，在实现中发现产品问题，再回头改掉最初那些导致问题的前提`,
+        `对我来说，设计和工程不像是两个分开的阶段，更像是塑造同一个产品的不同力量`,
+        `我想继续扩大这个范围，为 <strong class="font-[520]">做什么、为什么做</strong> 承担更多责任，而不是只负责流程中一个已经被定义好的环节`,
+      ],
+    },
+  ],
+  footerProjects: 'Projects',
+  footerSite: 'Site',
+  footerAbout: 'About',
+  footerBlog: 'Journal',
+  signoff: '清凤 · Chiffonwind · b. 2009',
+};
+---
+
+<Home lang="zh" copy={copy} />

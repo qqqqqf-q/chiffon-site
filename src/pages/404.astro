@@ -1,0 +1,33 @@
+---
+// 静态 404 页面：让 Cloudflare Pages 对未知路径返回真实 HTTP 404，
+// 关闭默认 SPA 软 200 回退，避免搜索引擎与 AI 爬虫索引垃圾路径。
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<BaseLayout
+  title="404 · Chiffonwind (清凤)"
+  description="Page not found."
+  lang="en"
+  noindex={true}
+>
+  <SiteHeader lang="en" />
+
+  <main class="mx-auto max-w-[760px] px-6 py-28 text-center">
+    <p class="text-sm text-fade mb-4 tabular-nums">404</p>
+    <h1 class="font-display text-head text-3xl sm:text-4xl font-[450] tracking-tight mb-4">
+      Page not found
+    </h1>
+    <p class="text-dim text-[15px] mb-10">
+      The page you are looking for has moved or does not exist.
+    </p>
+    <div class="flex items-center justify-center gap-6 text-[15px]">
+      <a href="/" class="text-head hover:text-accent transition-colors">Home</a>
+      <span class="text-fade">/</span>
+      <a href="/journal/" class="text-head hover:text-accent transition-colors">Journal</a>
+    </div>
+  </main>
+
+  <SiteFooter projectsTitle="Projects" siteTitle="Site" aboutLabel="About" journalLabel="Journal" lang="en" />
+</BaseLayout>

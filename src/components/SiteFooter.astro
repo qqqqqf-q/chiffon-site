@@ -1,0 +1,84 @@
+---
+// 站点页脚:左字标 + 圆形社交图标;右 Projects / Site 链接组。
+// 项目与社交清单统一来自 src/config/site.ts，确保页脚、JSON-LD、llms.txt 同源。
+import { PROJECTS, SOCIALS } from '../config/site';
+
+interface Props {
+  projectsTitle: string;
+  siteTitle: string;
+  aboutLabel: string;
+  journalLabel: string;
+  lang?: 'en' | 'zh';
+}
+
+const { projectsTitle, siteTitle, aboutLabel, journalLabel, lang = 'en' } = Astro.props;
+const footerProjects = PROJECTS.filter((p) => p.featuredInFooter);
+const aboutHref = lang === 'zh' ? '/zh/#about' : '/#about';
+const altLangHref = lang === 'zh' ? '/' : '/zh/';
+const altLangLabel = lang === 'zh' ? 'English' : '中文';
+const altHreflang = lang === 'zh' ? 'en' : 'zh-CN';
+---
+
+<!-- Footer:浅色模式用近黑(#131313)制造反差,深色模式沿用 bg-deep。
+     左:字标 + 圆形图标联系方式;右:项目/站点链接组(title 亮、条目次亮、宽字距)。
+     无主题切换(主题只跟随系统)。 -->
+<footer class="bg-[#131313] dark:bg-deep">
+  <div class="w-full px-8 sm:px-16 py-16 flex flex-col sm:flex-row justify-between gap-10">
+    <div>
+      <div class="text-white text-[22px] font-bold tracking-[0.03em] uppercase mb-6">Chiffon</div>
+      <div class="flex items-center gap-3">
+        {SOCIALS.map((s) => (
+          s.href ? (
+          <a
+            href={s.href}
+            target="_blank"
+            rel={s.icon === 'mail' ? 'noopener noreferrer' : 'noopener noreferrer me'}
+            aria-label={s.name}
+            class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/60 hover:bg-white/15 hover:text-white transition-colors"
+          >
+            {s.icon === 'github' && (
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            )}
+            {s.icon === 'x' && (
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93z"/></svg>
+            )}
+            {s.icon === 'telegram' && (
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.51l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L22.9 4.6c.31-1.42-.51-1.98-1.45-1.63L2.4 9.67c-1.39.54-1.37 1.32-.24 1.67l4.9 1.53L18.46 6.3c.53-.35 1.02-.16.62.19l-10.04 8.82z"/></svg>
+            )}
+            {s.icon === 'mail' && (
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            )}
+          </a>
+          ) : (
+          // 无直链的渠道(WeChat):同样式圆形按钮,点击经自定义事件
+          // 打开全局名片弹窗(WeChatDialog.vue)
+          <button
+            type="button"
+            onclick="window.dispatchEvent(new CustomEvent('open-wechat-dialog'))"
+            aria-label={s.name}
+            class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/60 hover:bg-white/15 hover:text-white transition-colors cursor-pointer"
+          >
+            {/* wechat 图标路径取自 simple-icons(CC0) */}
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z"/></svg>
+          </button>
+          )
+        ))}
+      </div>
+    </div>
+    <div class="flex gap-24">
+      <div class="flex flex-col gap-4">
+        <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">{projectsTitle}</span>
+        {footerProjects.map((p) => (
+          <a href={p.link} target="_blank" rel="noopener noreferrer" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{p.name}</a>
+        ))}
+      </div>
+      <div class="flex flex-col gap-4">
+        <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">{siteTitle}</span>
+        <a href={aboutHref} class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{aboutLabel}</a>
+        <a href="/journal/" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{journalLabel}</a>
+        <a href={altLangHref} hreflang={altHreflang} class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{altLangLabel}</a>
+        <a href="/rss.xml" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">RSS</a>
+      </div>
+    </div>
+  </div>
+</footer>

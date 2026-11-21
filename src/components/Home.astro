@@ -1,0 +1,121 @@
+---
+// 首页共享骨架:EN(/)与 ZH(/zh/)两个页面共用同一份结构,
+// 各自只提供文案(copy)。语言无关的顶栏/页脚已抽成
+// SiteHeader.astro / SiteFooter.astro 与 journal 页面共用。
+// 要改文案去 src/pages/index.astro(en)或 src/pages/zh/index.astro(zh)。
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import { absoluteUrl } from '../config/site';
+import { buildHomeJsonLd } from '../lib/schema';
+
+interface CopySection {
+  id?: string;
+  title: string;
+  paragraphs: string[]; // 段落内的 <strong> 是文案自带强调,经 set:html 输出
+}
+
+interface Props {
+  lang: 'en' | 'zh';
+  copy: {
+    metaTitle: string;
+    metaDescription: string;
+    crumbHome: string;
+    crumbHere: string;
+    heroTitle: string;
+    heroTagline: string;
+    heroDate: string;
+    heroAlt: string;
+    sections: CopySection[];
+    footerProjects: string;
+    footerSite: string;
+    footerAbout: string;
+    footerBlog: string;
+    signoff: string;
+  };
+}
+
+const { lang, copy } = Astro.props;
+const htmlLang = lang === 'zh' ? 'zh-CN' : 'en';
+const canonicalPath = lang === 'zh' ? '/zh/' : '/';
+const alternates = [
+  { hreflang: 'en', href: absoluteUrl('/') },
+  { hreflang: 'zh-CN', href: absoluteUrl('/zh/') },
+  { hreflang: 'x-default', href: absoluteUrl('/') },
+];
+
+// 正文段落样式:Kimi 正文参数——MiSans VF 17px / 90% 黑(深色模式回落 Terra body)/
+// 行高 1.65。正文用 330,文案自带的 <strong> 抬到 520(写在文案里)。
+const bodyClass = 'font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body';
+---
+
+<BaseLayout
+  title={copy.metaTitle}
+  description={copy.metaDescription}
+  lang={htmlLang}
+  canonicalPath={canonicalPath}
+  alternates={alternates}
+  ogType="profile"
+  jsonLd={buildHomeJsonLd(lang)}
+>
+  <SiteHeader lang={lang} current="about" />
+
+  <main>
+    <!-- Hero:发布页式居中。文字区和图片区分开限宽——
+         文字走 max-w-5xl 的阅读宽度,hero 独立走 max-w-7xl,不被文字列压住 -->
+    <section class="pt-14 pb-16 text-center">
+      <div class="mx-auto max-w-5xl px-6">
+        <p class="text-sm text-fade mb-6">{copy.crumbHome}<span class="mx-2">/</span>{copy.crumbHere}</p>
+        <!-- 两行式居中标题:名字一行、态度一行(灰色做层级),下面一行日期 -->
+        <h1 class="font-display text-head text-4xl sm:text-5xl font-[450] tracking-tight mb-6 mx-auto max-w-5xl px-6">
+          <span class="block">{copy.heroTitle}</span>
+          <span class="block text-dim">{copy.heroTagline}</span>
+        </h1>
+        <p class="text-fade text-sm mb-10">{copy.heroDate}</p>
+      </div>
+
+      <!-- hero:桌面俯拍,1048:482(约 2.17:1)扁幅,object-cover 裁切填充。
+           宽度 max-w-6xl:占满首屏但不溢出压迫,让导语自然落到折叠线以下 -->
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="aspect-[1048/482] rounded-[var(--radius-section)] overflow-hidden">
+          <img
+            src="/images/hero.webp"
+            alt={copy.heroAlt}
+            width="1672"
+            height="941"
+            fetchpriority="high"
+            decoding="async"
+            class="w-full h-full object-cover dark:brightness-[0.9]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- 正文小节(Kimi 式):标题 MiSans 32px/450 + 正文 17px/330 / 行高 1.65 /
+         栏宽 760px。文案在各页面的 copy.sections;首个小节带 #about 锚点。
+         段间距 mb-4:文案是大量短段,再大(曾用 mb-8)会读成一堆孤立的碎片 -->
+    {copy.sections.map((sec) => (
+      <section id={sec.id || undefined} class="mx-auto max-w-[760px] px-6 pb-24 scroll-mt-20">
+        {sec.title && (
+          <h2 class="font-display text-[32px] font-[450] text-head mb-6">{sec.title}</h2>
+        )}
+        {sec.paragraphs.map((p, i) => (
+          <p
+            class={`${bodyClass}${i < sec.paragraphs.length - 1 ? ' mb-4' : ''}`}
+            set:html={p}
+          />
+        ))}
+      </section>
+    ))}
+    <!-- 签名档:放在文章结尾(正文栏内),不是页面结尾 -->
+    <p class="mx-auto max-w-[760px] px-6 pb-24 text-sm text-fade">{copy.signoff}</p>
+  </main>
+
+  <SiteFooter
+    projectsTitle={copy.footerProjects}
+    siteTitle={copy.footerSite}
+    aboutLabel={copy.footerAbout}
+    journalLabel={copy.footerBlog}
+    lang={lang}
+  />
+</BaseLayout>

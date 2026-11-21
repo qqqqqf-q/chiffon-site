@@ -8,6 +8,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.6",
     "@astrojs/vue": "^5.1.4",
     "@felinic/ui": "file:../Memoh/packages/ui",
     "@tailwindcss/vite": "^4.1.18",

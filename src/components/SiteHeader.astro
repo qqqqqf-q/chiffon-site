@@ -1,0 +1,59 @@
+---
+// 站点顶栏:字标 + 语言切换 / 居中 nav / ContactMenu。
+// 由 Home.astro(EN/ZH 首页)与 journal 页面共用,保证全站 header 同源。
+// nav 是界面文字,按全站语言策略固定英文(见 zh/index.astro 头注释),不写进 copy;
+// 各页面只需传 current 标出当前位置。
+import LangSelect from './LangSelect.vue';
+import ContactMenu from './ContactMenu.vue';
+import WeChatDialog from './WeChatDialog.vue';
+
+interface Props {
+  lang: 'en' | 'zh';
+  current?: 'about' | 'journal';
+}
+
+const { lang, current } = Astro.props;
+---
+
+<!-- nav 用 absolute 钉在 header 几何中心(grid 的 1fr 分配会受两侧
+     内容宽度差影响,视觉中心会偏),左右两组内容 flex 两端分布 -->
+<header id="site-header" class="sticky top-0 z-40 relative w-full px-5 sm:px-20 h-[66px] flex items-center justify-between bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
+  <div class="flex items-end gap-1">
+    <a href={lang === 'zh' ? '/zh/' : '/'} class="text-head text-2xl font-bold tracking-[0.02em] uppercase">
+      Chiffon
+    </a>
+    <!-- 语言切换跟在字标右侧,小一号、dim 色,读作字标的"副标题"。
+         底部对齐后上抬 2px:'g' 的下伸笔画贴底时视觉上会坠。
+         注意:felinic Select 不是 SSR 安全的,只能 client:only
+         (client:load 会在 SSR 抛错);静态爬虫入口同时在 SiteFooter 与 head hreflang 提供。 -->
+    <span class="mb-[2px]"><LangSelect lang={lang} client:only="vue" /></span>
+  </div>
+  {/* 居中 nav 只在 sm 以上显示:窄屏下 absolute 居中会和左侧字标+语言切换重叠。
+      窄屏改用右侧组里的同一组链接(见下),保证手机顶栏也能直达 About / Journal。 */}
+  <nav class="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8">
+    <a href={lang === 'zh' ? '/zh/#about' : '/#about'} aria-current={current === 'about' ? 'page' : undefined} class={`text-base transition-colors ${current === 'about' ? 'text-head' : 'text-dim hover:text-head'}`}>About</a>
+    <a href="/journal/" aria-current={current === 'journal' ? 'page' : undefined} class={`text-base transition-colors ${current === 'journal' ? 'text-head' : 'text-dim hover:text-head'}`}>Journal</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <nav class="flex sm:hidden items-center gap-4">
+      <a href={lang === 'zh' ? '/zh/#about' : '/#about'} aria-current={current === 'about' ? 'page' : undefined} class={`text-[15px] ${current === 'about' ? 'text-head' : 'text-dim'}`}>About</a>
+      <a href="/journal/" aria-current={current === 'journal' ? 'page' : undefined} class={`text-[15px] ${current === 'journal' ? 'text-head' : 'text-dim'}`}>Journal</a>
+    </nav>
+    {/* 窄屏顶栏放不下字标+语言+两条链接+联系按钮,联系按钮让位给导航;
+        手机端的联系方式由页脚的社交/邮件图标承接。 */}
+    <div class="hidden sm:block"><ContactMenu client:load /></div>
+    <WeChatDialog client:load />
+  </div>
+</header>
+
+<script>
+  // 顶栏分割线只在滚动后出现:页面顶部时保持纯净,滚动后模糊层+线把 bar 和内容分开
+  const header = document.getElementById('site-header');
+  const onScroll = () => {
+    const scrolled = window.scrollY > 4;
+    header?.classList.toggle('border-line-soft', scrolled);
+    header?.classList.toggle('border-transparent', !scrolled);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

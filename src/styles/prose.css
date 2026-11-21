@@ -1,0 +1,172 @@
+/* journal 文章正文排版(.journal-prose)。
+   基准参数沿用全站"Kimi 正文参数"(见 Home.astro bodyClass 注释):
+   MiSans 17px / 字重 330 / 行高 1.65 / 近黑(深色回落 Terra body)。
+   层级规则:标题比正文强的只有尺寸和字色,不引入额外字体;
+   引用块是唯一用衬线的地方——衬线天然读作"被引述的话",
+   与正文无衬线形成一层无声的层级(与全站"导语/叙事用衬线"同源)。 */
+
+.journal-prose {
+  font-family: var(--c-font-display);
+  font-size: 17px;
+  font-weight: 330;
+  line-height: 1.65;
+  color: #000000e6;
+  overflow-wrap: break-word;
+}
+.dark .journal-prose {
+  color: var(--c-text-secondary);
+}
+
+.journal-prose > *:last-child {
+  margin-bottom: 0;
+}
+
+/* 段落:间距 1em。比首页 copy 段落的 mb-4(16px)略松,
+   长文里段落是节奏单位,太紧会读成一堵墙 */
+.journal-prose p {
+  margin-bottom: 1em;
+}
+
+/* 标题:h2 是小节单位,h3 出现频率低、只比正文大半档。
+   上多下少(mt 2em / mb 0.8em):标题锚定的是它后面的内容 */
+.journal-prose h2 {
+  font-size: 24px;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--c-text-heading);
+  margin: 2em 0 0.8em;
+  scroll-margin-top: 90px;
+}
+.journal-prose h3 {
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.4;
+  color: var(--c-text-heading);
+  margin: 1.6em 0 0.7em;
+  scroll-margin-top: 90px;
+}
+.journal-prose h4 {
+  font-size: 17px;
+  font-weight: 520;
+  color: var(--c-text-heading);
+  margin: 1.4em 0 0.6em;
+}
+
+/* 链接:品牌赤陶橙 + 下划线。正文里链接要能被找到,但不能比文字本身更吵 */
+.journal-prose a {
+  color: var(--c-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-thickness 150ms ease-out;
+}
+.journal-prose a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* 强调:与首页文案的 <strong> 同一规格(520) */
+.journal-prose strong,
+.journal-prose b {
+  font-weight: 520;
+  color: var(--c-text-heading);
+}
+
+/* 引用:衬线 + 左侧 2px 线。dim 色让它弱于正文一档 */
+.journal-prose blockquote {
+  font-family: var(--c-font-serif);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--c-text-tertiary);
+  border-left: 2px solid var(--c-border-mid);
+  padding-left: 16px;
+  margin: 1.5em 0;
+}
+.journal-prose blockquote > *:last-child {
+  margin-bottom: 0;
+}
+
+/* 列表:disc 标记降一级亮度;条目间只留半行,避免列表内部过散 */
+.journal-prose ul {
+  list-style: disc;
+  padding-left: 24px;
+  margin-bottom: 1em;
+}
+.journal-prose ol {
+  list-style: decimal;
+  padding-left: 24px;
+  margin-bottom: 1em;
+}
+.journal-prose li {
+  margin-bottom: 0.35em;
+}
+.journal-prose li::marker {
+  color: var(--c-text-muted);
+}
+.journal-prose li > ul,
+.journal-prose li > ol {
+  margin: 0.35em 0;
+}
+
+/* 行内代码:chip 底色、字号缩到 0.85em,沉在句子里不跳行 */
+.journal-prose code {
+  font-family: var(--c-font-code);
+  font-size: 0.85em;
+  background: var(--c-bg-tag);
+  border-radius: var(--radius-control);
+  padding: 2px 5px;
+}
+
+/* 代码块:深一档底(bg-deep)托住整块,横向滚动收进容器,
+   页面主体永不出现横向滚动条 */
+.journal-prose pre {
+  background: var(--c-bg-deep);
+  border-radius: var(--radius-section);
+  padding: 16px 20px;
+  margin: 1.5em 0;
+  overflow-x: auto;
+}
+.journal-prose pre code {
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--c-text-secondary);
+}
+
+/* 分隔线:旧博客文章里 hr 是常用分节符,给足上下留白 */
+.journal-prose hr {
+  border: none;
+  border-top: 1px solid var(--c-border);
+  margin: 2.2em 0;
+}
+
+/* 图片:沿用 section 级圆角,与 hero/卡片一致 */
+.journal-prose img {
+  border-radius: var(--radius-section);
+  margin: 1.5em 0;
+}
+
+/* 表格:小号字 + 行线,表头用 sub 底与正文行分开 */
+.journal-prose table {
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 1.5em 0;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+.journal-prose th {
+  text-align: left;
+  font-weight: 520;
+  color: var(--c-text-heading);
+  background: var(--c-bg-sub);
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+.journal-prose td {
+  padding: 8px 12px;
+  border-top: 1px solid var(--c-border-subtle);
+}

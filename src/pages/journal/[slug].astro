@@ -1,0 +1,141 @@
+---
+// journal 文章页。版心/正文参数与首页 About 小节同源(760px + Kimi 正文参数,
+// 样式在 prose.css);头部是 crumb + 标题 + 描述 + 元信息行,尾部给前后篇导航。
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { SITE_URL } from '../../config/site';
+import { buildArticleJsonLd } from '../../lib/schema';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('journal', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, '') },
+    props: { post, all: posts },
+  }));
+}
+
+const { post, all } = Astro.props;
+const { Content } = await render(post);
+const slug = post.id.replace(/\.md$/, '');
+
+// 前后篇按日期排序:新在前。"Newer" 是更新的一篇,"Older" 是更早的一篇
+const byDate = [...all].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const idx = byDate.findIndex((p) => p.id === post.id);
+const newer = idx > 0 ? byDate[idx - 1] : null;
+const older = idx >= 0 && idx < byDate.length - 1 ? byDate[idx + 1] : null;
+
+const fmt = new Intl.DateTimeFormat('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+
+// 字数统计:去掉代码块/行内代码/图片/链接 URL/HTML 标签和 markdown 记号后,
+// CJK 字符逐字计,拉丁词按词计——中文文章的字数才接近真实的"读了多少字"
+function countPostWords(raw: string = ''): number {
+  let text = raw
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/~~~[\s\S]*?~~~/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
+    .replace(/^\s*\[[^\]]+\]:\s*.*$/gm, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/[#>*_~]/g, ' ')
+    .replace(/\s+/g, ' ');
+  const cjk = (text.match(/[一-鿿]/g) || []).length;
+  const words = (text.match(/[A-Za-z0-9]+(?:'[A-Za-z0-9]+)?/g) || []).length;
+  return cjk + words;
+}
+
+const wordCount = countPostWords(post.body ?? '');
+const articleLang = post.data.lang ?? 'zh-CN';
+const jsonLd = buildArticleJsonLd({
+  slug,
+  title: post.data.title,
+  description: post.data.description,
+  date: post.data.date,
+  updatedDate: post.data.updatedDate,
+  lang: articleLang,
+  wordCount,
+  tags: post.data.tags,
+  keywords: post.data.keywords,
+});
+---
+
+<BaseLayout
+  title={`${post.data.title} · Chiffonwind (清凤)`}
+  description={post.data.description}
+  lang={articleLang}
+  canonicalPath={`/journal/${slug}/`}
+  ogType="article"
+  articleMeta={{
+    publishedTime: post.data.date.toISOString(),
+    modifiedTime: (post.data.updatedDate ?? post.data.date).toISOString(),
+    author: `${SITE_URL}/`,
+    tags: post.data.tags,
+  }}
+  jsonLd={jsonLd}
+>
+  <SiteHeader lang={articleLang.startsWith('zh') ? 'zh' : 'en'} current="journal" />
+
+  <main class="mx-auto max-w-[760px] px-6 pt-14 pb-24">
+    <!-- 页头:crumb 继承首页的 fade 小字;标题/描述/元信息左对齐排一列 -->
+    <header class="mb-10">
+      <p class="text-sm text-fade mb-6">
+        <a href="/" class="hover:text-dim transition-colors">Home</a><span class="mx-2">/</span><a href="/journal/" class="hover:text-dim transition-colors">Journal</a>
+      </p>
+      <h1 class="font-display text-head text-[32px] sm:text-[40px] font-[450] tracking-tight leading-[1.15] mb-4">
+        {post.data.title}
+      </h1>
+      <p class="text-dim text-[17px] leading-relaxed mb-6">{post.data.description}</p>
+      <div class="flex flex-wrap items-center gap-2 text-fade text-[13px]">
+        <time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time>
+        <span>·</span>
+        <a href="/" class="hover:text-dim transition-colors">Chiffonwind · 清凤</a>
+        <span>·</span>
+        <span>{wordCount.toLocaleString('zh-CN')} 字</span>
+        {(post.data.tags?.length ?? 0) > 0 && (
+          <div class="flex flex-wrap gap-1.5 ml-1">
+            {post.data.tags!.map((tag) => (
+              <span class="text-[11px] text-fade bg-chip rounded px-2 py-0.5">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <hr class="border-line-soft mb-12" />
+
+    <article class="journal-prose">
+      <Content />
+    </article>
+
+    <!-- 尾部导航:回到索引 + 前后篇。长中文标题截断,保持两行布局不炸 -->
+    <hr class="border-line-soft mt-16 mb-10" />
+    <nav class="flex items-start justify-between gap-6 text-[15px]">
+      <a href="/journal/" class="text-fade hover:text-dim transition-colors shrink-0">&larr; Journal</a>
+      <div class="flex gap-10 text-right">
+        {newer && (
+          <a href={`/journal/${newer.id.replace(/\.md$/, '')}/`} class="group min-w-0">
+            <span class="block text-fade text-[12px] mb-1">Newer</span>
+            <span class="text-dim group-hover:text-accent transition-colors truncate block max-w-[220px]">{newer.data.title}</span>
+          </a>
+        )}
+        {older && (
+          <a href={`/journal/${older.id.replace(/\.md$/, '')}/`} class="group min-w-0">
+            <span class="block text-fade text-[12px] mb-1">Older</span>
+            <span class="text-dim group-hover:text-accent transition-colors truncate block max-w-[220px]">{older.data.title}</span>
+          </a>
+        )}
+      </div>
+    </nav>
+  </main>
+
+  <SiteFooter projectsTitle="Projects" siteTitle="Site" aboutLabel="About" journalLabel="Journal" lang={articleLang.startsWith('zh') ? 'zh' : 'en'} />
+</BaseLayout>

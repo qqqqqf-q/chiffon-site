@@ -80,11 +80,13 @@
   --c-font-serif: 'Newsreader', 'Songti SC', 'Noto Serif SC', 'SimSun', serif;
   --c-font-code: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 
-  --c-bg-page: #FAF9F6;
-  --c-bg-deep: #F0EEE7;
-  --c-bg-sub: #F5F4EE;
+  /* 浅色底:暖纸色。层级方向是"纸页比桌面亮"——色块靠提亮区分,不往灰里压
+     (把浅色压暗必然发灰发脏)。彩度控制在 0.012 以内,再高读成黄。 */
+  --c-bg-page: oklch(0.964 0.004 85);
+  --c-bg-deep: oklch(0.94 0.004 85);
+  --c-bg-sub: oklch(0.975 0.004 85);
   --c-bg-card: #ffffff;
-  --c-bg-tag: #E8E5DC;
+  --c-bg-tag: oklch(0.94 0.004 85);
 
   --c-text-primary: #1a1a18;
   --c-text-heading: #0f0f0d;
@@ -101,6 +103,11 @@
 
   --c-scrollbar: #D0CCC4;
   --c-scrollbar-hover: #B0ACA4;
+
+  /* 纸页色块（journal 卡片等）：比页面亮一档的"纸页"，hover 再亮到近白 */
+  --c-bg-paper: oklch(0.991 0.004 85);
+  --c-bg-paper-hover: oklch(0.973 0.004 85);
+  --c-bg-paper-active: oklch(0.949 0.004 85);
 }
 
 /* ── Terra 深色 tokens：色号直接取自 Memoh（@felinic/ui 的 .dark 块）──
@@ -130,6 +137,11 @@
 
   --c-scrollbar: oklch(1 0 0 / 0.14);
   --c-scrollbar-hover: oklch(1 0 0 / 0.26);
+
+  /* 深色下纸面色块回到零彩度阶梯：比 page 高一档、hover 再高一档 */
+  --c-bg-paper: oklch(0.205 0 0);
+  --c-bg-paper-hover: oklch(0.235 0 0);
+  --c-bg-paper-active: oklch(0.26 0 0);
 }
 
 @theme inline {
@@ -138,6 +150,9 @@
   --color-deep: var(--c-bg-deep);
   --color-sub: var(--c-bg-sub);
   --color-chip: var(--c-bg-tag);
+  --color-paper: var(--c-bg-paper);
+  --color-paper-hover: var(--c-bg-paper-hover);
+  --color-paper-active: var(--c-bg-paper-active);
   --color-line: var(--c-border);
   --color-line-soft: var(--c-border-subtle);
   --color-line-mid: var(--c-border-mid);
@@ -158,6 +173,10 @@
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration-normal: 150ms;
+}
+
+body {
+  background-color: var(--c-bg-page);
 }
 
 @layer base {

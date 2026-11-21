@@ -1,242 +1,71 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ContactMenu from '../components/ContactMenu.vue';
-import LangSelect from '../components/LangSelect.vue';
+// EN 首页文案。页面结构在 src/components/Home.astro(与中文版共用)。
+import Home from '../components/Home.astro';
 
-// 项目"跑分"：GitHub stars，2026-07 通过 gh api 拉取的真实数据。
-// 数字变硬编码是为了让构建保持纯静态；更新时改这里即可。
-// flagship 字段决定哪一条用 accent 高亮（发布页惯例：自己的产品高亮）。
-const projects = [
-  { name: 'Arkloop', desc: 'Open-source conversational AI agent platform', lang: 'Go', stars: 372, link: 'https://github.com/qqqqqf-q/Arkloop', flagship: true },
-  { name: 'MirrorFlow', desc: 'Fine-tune LLMs on chat history to replay your voice', lang: 'Python', stars: 71, link: 'https://github.com/qqqqqf-q/MirrorFlow' },
-  { name: 'Oxidarb', desc: 'Rust triangular arbitrage, 10µs per loop', lang: 'Rust', stars: 8, link: 'https://github.com/Arkilo-Labs/Oxidarb' },
-  { name: 'NanoTrans', desc: 'Cross-platform lightweight input translation', lang: 'Rust', stars: 6, link: 'https://github.com/qqqqqf-q/NanoTrans' },
-  { name: 'Arkanis', desc: 'AI-driven trading decision experiments', lang: 'JavaScript', stars: 1, link: 'https://github.com/Arkilo-Labs/Arkanis' },
-];
-const maxStars = Math.max(...projects.map((p) => p.stars));
-
-const capabilities = [
-  { area: 'Agent Systems', stack: 'Go · LLM runtime', work: 'Arkloop' },
-  { area: 'Digital Twin', stack: 'Python · Fine-tuning', work: 'MirrorFlow' },
-  { area: 'System Tools', stack: 'Rust · Desktop', work: 'NanoTrans' },
-  { area: 'Quant Trading', stack: 'Rust · Low-latency', work: 'Oxidarb' },
-];
-
-// 日志留在旧博客（清凤.fun），这里只做入口。文章本身是中文，标题保留原文。
-const posts = [
-  { title: 'GPT-4.5 模型到底有多大？', date: '2026-05-08', href: 'https://清凤.fun/journal/2026-05-07-gpt-4.5-size-estimation' },
-  { title: '重启之后，你还认识我吗？', date: '2026-03-31', href: 'https://清凤.fun/journal/2026-03-31-agent-kin' },
-  { title: 'Claude Code 开源了，什么是我们可以学到的', date: '2026-03-31', href: 'https://清凤.fun/journal/2026-03-31-claudecode-leak' },
-  { title: '对 Taalas 团队将 llama3 刻进芯片的一些看法', date: '2026-02-23', href: 'https://清凤.fun/journal/2026-02-23-taalas-jimmy' },
-];
-
-// 社交链接：顶栏 ContactMenu.vue 一份、footer 联系栏一份，两处保持同步。
-// icon 字段对应 footer 圆形按钮里的内联 SVG。
-const socials = [
-  { name: 'GitHub', href: 'https://github.com/qqqqqf-q', handle: '@qqqqqf-q', icon: 'github' },
-  { name: 'X', href: 'https://x.com/qqqqqf_', handle: '@qqqqqf_', icon: 'x' },
-  { name: 'Telegram', href: 'https://t.me/NS_qingf_bot', handle: '@NS_qingf_bot', icon: 'telegram' },
-  { name: 'Email', href: 'mailto:qingf622@outlook.com', handle: 'qingf622@outlook.com', icon: 'mail' },
-];
+const copy = {
+  metaTitle: 'Chiffonwind (清凤) — Always Building',
+  metaDescription:
+    'Chiffonwind (清凤) — Full-stack & design engineer building AI agent systems (Arkloop, Memoh) and developer tools across design and engineering.',
+  crumbHome: 'Home',
+  crumbHere: 'About',
+  heroTitle: 'Chiffonwind:',
+  heroTagline: 'Always Building.',
+  heroDate: 'since 2009',
+  heroAlt: "Chiffonwind's workspace",
+  sections: [
+    {
+      id: 'about',
+      title: 'Building products across design and engineering',
+      paragraphs: [
+        `I like taking a vague problem and turning it into something people can actually use`,
+        `That usually means moving through interface, interaction, implementation, systems, and architecture without treating them as completely separate layers`,
+        `How a product works shapes how it should be designed, and design decisions often reshape the implementation in return`,
+        `I increasingly care not only about <strong class="font-[520]">how to build it</strong>, but also <strong class="font-[520]">what should be built, and why</strong>`,
+      ],
+    },
+    {
+      title: 'Building Things That Work',
+      paragraphs: [
+        `I like pragmatism, but practical does not mean taking the shortest path to “done”`,
+        `Sometimes another layer of abstraction is the practical choice`,
+        `Sometimes it means fixing an architecture that keeps creating the same problems`,
+        `Sometimes it means throwing away an interaction that simply does not work and starting again`,
+        `I care about systems and logic, but not architecture for architecture's sake, and not speed that knowingly leaves tomorrow with today's problems`,
+        `Good engineering should make a product easier to move forward, not just make the solution itself look clever`,
+        `<strong class="font-[520]">What actually works matters more</strong>`,
+      ],
+    },
+    {
+      title: 'Real Products, Real Constraints',
+      paragraphs: [
+        `I like studying products that already exist, especially the ones used by a lot of people`,
+        `With ChatGPT, Claude, Cursor, Doubao, and other mature products, what interests me is often not what looks impressive, but why they ended up making a particular choice`,
+        `An ordinary interface can carry the result of user behavior, A/B tests, engineering constraints, business goals, legacy decisions, or years of iteration`,
+        `I like working backward from those outcomes to the product decisions behind them, and comparing how different products make different trade-offs around similar problems`,
+        `That is also why I like Mobbin`,
+        `To me, it is less a gallery of polished UI and more a huge <strong class="font-[520]">real-world product dataset</strong>`,
+        `Real products rarely have a perfect solution`,
+        `They are shaped by choices made under real constraints`,
+      ],
+    },
+    {
+      title: 'Across Design and Engineering',
+      paragraphs: [
+        `I do not like defining myself by a framework or a stack`,
+        `Tools change, and technologies that feel important today may become ordinary a few years from now`,
+        `I care more about why something works than what it was built with`,
+        `So I write code, design interfaces, discover product problems during implementation, then go back and change the assumptions that led there in the first place`,
+        `Design and engineering feel less like separate stages to me, and more like different forces shaping the same product`,
+        `I want to keep expanding that scope and take more responsibility for <strong class="font-[520]">what gets built and why</strong>, rather than only owning one already-defined part of the process`,
+      ],
+    },
+  ],
+  footerProjects: 'Projects',
+  footerSite: 'Site',
+  footerAbout: 'About',
+  footerBlog: 'Journal',
+  signoff: 'Chiffonwind (清凤) · b. 2009',
+};
 ---
 
-<BaseLayout title="Introducing Chiffonwind" description="The personal release page of Chiffonwind">
-
-  <!-- 顶栏：nav 用 absolute 钉在 header 几何中心（grid 的 1fr 分配会受两侧
-       内容宽度差影响，视觉中心会偏），左右两组内容 flex 两端分布 -->
-  <header id="site-header" class="sticky top-0 z-40 relative w-full px-10 sm:px-20 h-[66px] flex items-center justify-between bg-surface/60 backdrop-blur-md border-b border-transparent transition-colors duration-200">
-    <div class="flex items-end gap-1">
-      <a href="/" class="text-head text-2xl font-bold tracking-[0.02em] uppercase">
-        Chiffon
-      </a>
-      <!-- 语言切换跟在字标右侧，小一号、dim 色，读作字标的"副标题"。
-           底部对齐后上抬 2px：'g' 的下伸笔画贴底时视觉上会坠 -->
-      <span class="mb-[2px]"><LangSelect client:only="vue" /></span>
-    </div>
-    <nav class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-8">
-      <a href="#about" class="text-base text-dim hover:text-head transition-colors">About</a>
-      <a href="#projects" class="text-base text-dim hover:text-head transition-colors">Projects</a>
-      <a href="https://清凤.fun" class="text-base text-dim hover:text-head transition-colors">Blog</a>
-    </nav>
-    <div>
-      <ContactMenu client:load />
-    </div>
-  </header>
-
-  <script>
-    // 顶栏分割线只在滚动后出现：页面顶部时保持纯净，滚动后模糊层+线把 bar 和内容分开
-    const header = document.getElementById('site-header');
-    const onScroll = () => {
-      const scrolled = window.scrollY > 4;
-      header?.classList.toggle('border-line-soft', scrolled);
-      header?.classList.toggle('border-transparent', !scrolled);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-  </script>
-
-  <main>
-    <!-- Hero：发布页式居中。文字区和图片区分开限宽——
-         文字走 max-w-5xl 的阅读宽度，hero 独立走 max-w-7xl，不被文字列压住 -->
-    <section class="pt-14 pb-16 text-center">
-      <div class="mx-auto max-w-5xl px-6">
-        <p class="text-sm text-fade mb-6">Home<span class="mx-2">/</span>About</p>
-        <!-- 两行式居中标题：名字一行、态度一行（灰色做层级） -->
-        <h1 class="font-display text-head text-4xl sm:text-5xl font-[450] tracking-tight mb-6 mx-auto max-w-5xl px-6">
-          <span class="block">Chiffonwind:</span>
-          <span class="block text-dim">Always Building.</span>
-        </h1>
-        <p class="text-fade text-sm mb-10">since 2009</p>
-      </div>
-
-      <!-- hero：桌面俯拍，1048:482（约 2.17:1）扁幅，object-cover 裁切填充。
-           宽度 max-w-6xl：占满首屏但不溢出压迫，让导语自然落到折叠线以下 -->
-      <div class="mx-auto max-w-6xl px-6">
-        <div class="aspect-[1048/482] rounded-[var(--radius-section)] overflow-hidden">
-          <img src="/images/hero.png" alt="Chiffonwind 的工作台" class="w-full h-full object-cover dark:brightness-[0.9]" />
-        </div>
-      </div>
-    </section>
-
-    <!-- 导语：Kimi 正文参数——MiSans VF 17px / 90% 黑（深色模式回落 Terra body）/
-         行高 1.65 / 栏宽 760px -->
-    <section id="about" class="mx-auto max-w-[760px] px-6 pb-24 scroll-mt-20">
-      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body mb-8">
-        Chiffonwind is a student and a full-stack developer, occasionally a designer. From agent runtimes to quant arbitrage, from input tools to digital twins — the bar for building something is simple: he has to actually use it every day.
-      </p>
-      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body">
-        This site doesn't chase update frequency. It only ships when there is something worth releasing. Every update is a new version.
-      </p>
-    </section>
-
-    <!-- 小节模板（Kimi 式）：标题 MiSans 32px/450 + 正文 17px/330。
-         文案为 mock 占位，等正式文案替换；复用时复制这个 section 即可 -->
-    <section class="mx-auto max-w-[760px] px-6 pb-24">
-      <h2 class="font-display text-[32px] font-[450] text-head mb-6">Tools That Earn Their Keep</h2>
-      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body mb-8">
-        Every project here started as an itch of his own. Arkloop came out of building one too many agent loops by hand; NanoTrans exists because switching windows to translate a sentence is one window too many. If it doesn't survive daily use by its own author, it doesn't ship.
-      </p>
-      <p class="font-display text-[17px] font-[330] leading-[1.65] text-[#000000E6] dark:text-body">
-        The rest of the time goes to school, reading, and the occasional quant experiment that may or may not make the money back.
-      </p>
-    </section>
-
-    <!-- Projects：benchmark 式 bar chart -->
-    <section id="projects" class="mx-auto max-w-2xl px-6 pb-24 scroll-mt-20">
-      <div class="flex items-baseline gap-4 mb-8 border-b border-line-soft pb-4">
-        <h2 class="text-head text-2xl font-semibold">Projects</h2>
-        <span class="text-fade text-sm">GitHub stars · 2026-07</span>
-      </div>
-      <div class="flex flex-col gap-5">
-        {projects.map((p) => (
-          <a href={p.link} target="_blank" rel="noopener noreferrer" class="group block">
-            <div class="flex items-baseline justify-between mb-1.5">
-              <span class={`text-sm font-medium ${p.flagship ? 'text-head' : 'text-dim'} group-hover:text-head transition-colors`}>
-                {p.name}
-                <span class="text-fade font-normal ml-2 text-xs">{p.lang}</span>
-              </span>
-              <span class={`text-sm tabular-nums ${p.flagship ? 'text-head' : 'text-fade'}`}>{p.stars}</span>
-            </div>
-            <div class="h-2 rounded-full bg-deep overflow-hidden">
-              <div
-                class={`h-full rounded-full ${p.flagship ? 'bg-accent' : 'bg-line'}`}
-                style={`width: ${Math.max((p.stars / maxStars) * 100, 1.5)}%`}
-              />
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-
-    <!-- Capabilities：发布页式表格 -->
-    <section class="mx-auto max-w-2xl px-6 pb-24">
-      <div class="flex items-baseline gap-4 mb-8 border-b border-line-soft pb-4">
-        <h2 class="text-head text-2xl font-semibold">Capabilities</h2>
-      </div>
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="text-left text-fade text-xs">
-            <th class="font-medium pb-3 pr-4">Domain</th>
-            <th class="font-medium pb-3 pr-4">Stack</th>
-            <th class="font-medium pb-3">Flagship</th>
-          </tr>
-        </thead>
-        <tbody>
-          {capabilities.map((c) => (
-            <tr class="border-t border-line-soft">
-              <td class="py-3 pr-4 text-head font-medium">{c.area}</td>
-              <td class="py-3 pr-4 text-dim">{c.stack}</td>
-              <td class="py-3 text-dim">{c.work}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Journal：旧博客入口 -->
-    <section id="journal" class="mx-auto max-w-2xl px-6 pb-24 scroll-mt-20">
-      <div class="flex items-baseline gap-4 mb-8 border-b border-line-soft pb-4">
-        <h2 class="text-head text-2xl font-semibold">Journal</h2>
-        <a href="https://清凤.fun" class="text-fade text-sm hover:text-dim transition-colors">All posts →</a>
-      </div>
-      <div class="flex flex-col">
-        {posts.map((post) => (
-          <a href={post.href} class="group flex items-baseline justify-between gap-6 py-3 border-b border-line-soft last:border-0">
-            <span class="text-body group-hover:text-head transition-colors">{post.title}</span>
-            <span class="text-fade text-xs tabular-nums shrink-0">{post.date}</span>
-          </a>
-        ))}
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer：浅色模式用近黑（#131313）制造反差，深色模式沿用 bg-deep。
-       左：字标 + 圆形图标联系方式；右：项目/站点链接组（title 亮、条目次亮、宽字距）。
-       底栏只放语言切换，无版权行、无主题切换（主题只跟随系统）。 -->
-  <footer class="bg-[#131313] dark:bg-deep">
-    <div class="w-full px-8 sm:px-16 py-16 flex flex-col sm:flex-row justify-between gap-10">
-      <div>
-        <div class="text-white text-[22px] font-bold tracking-[0.03em] uppercase mb-6">Chiffon</div>
-        <div class="flex items-center gap-3">
-          {socials.map((s) => (
-            <a
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.name}
-              class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/60 hover:bg-white/15 hover:text-white transition-colors"
-            >
-              {s.icon === 'github' && (
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-              )}
-              {s.icon === 'x' && (
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93z"/></svg>
-              )}
-              {s.icon === 'telegram' && (
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M9.04 15.31l-.38 5.32c.54 0 .78-.23 1.06-.51l2.55-2.44 5.28 3.87c.97.53 1.66.25 1.92-.9L22.9 4.6c.31-1.42-.51-1.98-1.45-1.63L2.4 9.67c-1.39.54-1.37 1.32-.24 1.67l4.9 1.53L18.46 6.3c.53-.35 1.02-.16.62.19l-10.04 8.82z"/></svg>
-              )}
-              {s.icon === 'mail' && (
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-              )}
-            </a>
-          ))}
-        </div>
-      </div>
-      <div class="flex gap-24">
-        <div class="flex flex-col gap-4">
-          <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">Projects</span>
-          {projects.map((p) => (
-            <a href={p.link} target="_blank" rel="noopener noreferrer" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">{p.name}</a>
-          ))}
-        </div>
-        <div class="flex flex-col gap-4">
-          <span class="text-white text-sm font-medium tracking-[0.08em] mb-1">Site</span>
-          <a href="#about" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">About</a>
-          <a href="#journal" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">Journal</a>
-          <a href="https://清凤.fun" class="text-white/70 text-[14.5px] tracking-[0.02em] hover:text-white transition-colors">Blog</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-</BaseLayout>
+<Home lang="en" copy={copy} />
